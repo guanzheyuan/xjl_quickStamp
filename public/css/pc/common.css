@@ -1,0 +1,307 @@
+/* 公共 */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+	margin:0;
+	padding:0;
+}
+body {
+	font:12px/14px "微软雅黑";
+	min-width:1100px;
+	background:#eee;
+}
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+fieldset, img {
+	border:0
+}
+address, caption, cite, code, dfn, em, strong, th, var {
+	font-style:normal;
+	font-weight:normal
+}
+ol, ul {
+	list-style:none
+}
+caption, th {
+	text-align:left
+}
+.proxy_table th {
+	text-align:center;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size:100%;
+	font-weight:normal
+}
+q:before, q:after {
+	content:''
+}
+abbr, acronym {
+	border:0
+}
+a:link, a:visited {
+	text-decoration:none;
+	color:#3cc1e9;
+}
+a:hover, a:active {
+	text-decoration:none;
+	color:#BD0A01;
+	border:none;
+}
+.clearfix:after {
+	clear: both;
+	content: ' ';
+	display: block;
+	font-size: 0;
+	line-height: 0;
+	visibility: hidden;
+	height: 0;
+	overflow: hidden;
+}
+
+input[type=text], input[type=password] {
+	font-family:"微软雅黑";
+}
+a.white:link, a.white:visited {
+	color:#ffffff;
+}
+a.white:hover, a.white:active {
+	color:#ffffff;
+}
+.hidden {
+	display:none;
+}
+/*common font*/
+.font12 {
+	font-size:12px;
+}
+.font14 {
+	font-size:14px;
+}
+.font14 {
+	font-size:15px;
+}
+.font16 {
+	font-size:16px;
+}
+.font18 {
+	font-size:18px;
+}
+.font20 {
+	font-size:20px;
+}
+.font22 {
+	font-size:22px;
+}
+.font24 {
+	font-size:24px;
+}
+/*common color*/
+.black {
+	color:#000000 !important;
+}
+.blue {
+	color:#00ccff !important;
+}
+.red {
+	color:#F00 !important;
+}
+.orange {
+	color:#ffa054 !important;
+}
+.gray {
+	color:#999 !important;
+}
+.green {
+	color:#4cd964 !important;
+}
+/*common color*/
+.graybg {
+	background:#f0f0f0 !important;
+}
+/*common float*/
+.Fleft {
+	float:left;
+}
+.Fright {
+	float:right;
+}
+/*common text-layout*/
+.txtHide {
+	text-indent:-9999em;
+}
+.txtCt {
+	text-align:center !important;
+}
+.txtRt {
+	text-align:right !important;
+}
+.txtLt {
+	text-align:left !important;
+}
+/*common border*/
+.borderNone {
+	border:0 none !important;
+}
+.borderTop {
+	border-top:1px solid #eee;
+}
+/*common width*/
+.width20 {
+	width:20% !important;
+}
+.width33 {
+	width:33.333% !important;
+}
+.widthL {
+	width:65px !important;
+}
+.width60 {
+	width:60px !important;
+}
+.width80 {
+	width:80px !important;
+}
+.width100 {
+	width:100px !important;
+}
+.width120 {
+	width:120px !important;
+}
+.width130 {
+	width:130px !important;
+}
+.width150 {
+	width:150px !important;
+}
+.width200 {
+	width:200px !important;
+}
+.width220 {
+	width:220px !important;
+}
+.width240 {
+	width:240px !important;
+}
+.width260 {
+	width:260px !important;
+}
+.width280 {
+	width:280px !important;
+}
+.width300 {
+	width:300px !important;
+}
+.width330 {
+	width:330px !important;
+}
+.width335 {
+	width:334px !important;
+}
+.width420 {
+	width:420px !important;
+}
+/*common height*/
+.height90 {
+	height:90px !important;
+}
+.height120{
+	height:120px !important;
+}
+.height150{
+	height:150px !important;
+}
+.height180{
+	height:180px !important;
+}
+.height200{
+	height:200px !important;
+}
+.height220{
+	height:220px !important;
+}
+/*common margin*/
+.mg0 {
+	margin:0px !important;
+}
+.mgt5 {
+	margin-top:5px;
+}
+.mgt10 {
+	margin-top:10px;
+}
+/*common padding*/
+.pad0{
+	padding:0px !important;
+}
+.pdr5 {
+	padding-right:5px !important;
+}
+.pdR10 {
+	padding-right:10px !important;
+}
+.pdr15 {
+	padding-right:15px !important;
+}
+.pdr25 {
+	padding-right:25px !important;
+}
+.pdL15 {
+	padding-left:15px !important;
+}
+.pdL10 {
+	padding-left:10px !important;
+}
+.pdLR {
+	padding:0 30px !important;
+}
+.pdT20 {
+	padding-top:20px !important;
+}
+/*----ico-----*/
+/*arrow*/
+.icon01, .icon02, .icon03, .icon01_no, .icon02_no, .icon03_no, .icon04, .icon05, .icon06, .icon07, .icon08, .phone, .password, .reg_cont, .arrow, .tip_arrow {
+	background:url(/public/images/zzb/pc/probe.png);
+}
+.icon01, .icon02, .icon03 {
+	width:90px;
+	height:25px;
+}
+.icon01 {
+	background-position:0px -5px;
+}
+.icon02 {
+	background-position:0px -35px;
+}
+.icon03 {
+	background-position:0px -70px;
+}
+.icon01_no {
+	background-position:0px -131px;
+}
+.icon02_no {
+	background-position:0px -161px;
+}
+.icon03_no {
+	background-position:0px -196px;
+}
+.tip_arrow {
+	background-position:-70px -305px;
+}
+#tooltip{
+	position:absolute;
+	border:1px solid #333;
+	background:#f7f5d1;
+	padding:3px 3px 3px 3px;
+	color:#333;
+	display:none;
+	z-index:9999;
+}
+#tooltip img{
+	max-height:400px;
+	max-width:460px;
+}
+select{width:330px !important;}
+
+/* zDialog buttonStyle */
+.buttonStyle{width:64px;height:22px;line-height:22px;color:#369;text-align:center;background:url(/public/zdialog/images/buticon.gif) no-repeat left top;border:0;font-size:12px;}
+.buttonStyle:hover{background:url(/public/zdialog/images/buticon.gif) no-repeat left -23px;}

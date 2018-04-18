@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+<link rel="stylesheet" href="../css/style.css">
+<title>每周作业-增加标榜</title>
+</head>
+
+<body>
+<div class="main">
+  <div class="row">
+    <h3 class="padded-b-10 padded-t-20">标榜图<span class="text-pink padded-l-5">*</span></h3>
+    <div class="padded-5 btnbox">
+       <input type="button" value="拍照上传" class="btn btn-white"/>
+    </div>
+    <h3 class="padded-b-10 padded-t-20">评语<span class="text-pink padded-l-5">*</span></h3>
+    <div class="border padded-5">
+    <textarea class="height5" onKeyDown="textdown(event)"
+    onKeyUp="textup()" onFocus="if(value=='请输入评语'){value=''}"
+    onblur="if (value ==''){value='请输入评语'}">请输入评语</textarea>
+    </div>
+    <h3 class="padded-b-10 padded-t-20">学生<span class="text-pink padded-l-5">*</span></h3>
+    <div class="border padded-5 posrel"><span>选择学生</span><div class="tabbtn wid2 top0"><img src="../images/down.png" /></div>
+    </div>
+    <div class="margin-t-15 margin-b-15 btnbox">
+    <input type="button" class="btn btn-white line-height-2" onClick="window.location='index.html'" value="取消"/>
+    <input type="button" class="btn btn-blue line-height-2 margin-l-15" onClick="window.location='index.html'" value="发布标榜"/>
+    </div>
+  </div>
+</div>
+</body>
+</html>

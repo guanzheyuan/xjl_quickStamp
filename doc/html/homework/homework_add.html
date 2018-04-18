@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+<link rel="stylesheet" href="../css/style.css">
+<title>作业发布</title>
+</head>
+
+<body>
+<div class="main">
+  <div class="row">
+    <!--h3 class="padded-b-10 padded-t-20">班级<span class="text-pink padded-l-5">*</span></h3>
+    <div class="border padded-5 posrel"><span>请选择班级</span><div class="tabbtn wid2 top0"><img src="../images/down.png" /></div>
+    </div-->
+    <h3 class="padded-b-10 padded-t-20">科目<span class="text-pink padded-l-5">*</span></h3>
+    
+    <div class="border padded-5 posrel"><span>英语</span><div class="tabbtn wid2 top0"><img src="../images/down.png" /></div>
+    </div>
+    <h3 class="padded-b-10 padded-t-20">标题<span class="text-pink padded-l-5">*</span></h3>
+    <div class="border padded-5">
+      <input type="text" value="请输入作业标题"
+    onfocus="if (value =='请输入作业标题'){value =''}"
+    onblur="if (value ==''){value='请输入作业标题'}"  />
+    </div>
+    <h3 class="padded-b-10 padded-t-20">内容<span class="text-pink padded-l-5">*</span></h3>
+    <div class="border padded-5">
+      <textarea class="height10" onKeyDown="textdown(event)"
+    onKeyUp="textup()" onFocus="if(value=='请输入作业内容'){value=''}"
+    onblur="if (value ==''){value='请输入作业内容'}">请输入作业内容</textarea>
+    </div>
+    
+    <div class="margin-t-15 margin-b-15 btnbox">
+    <input type="button" class="btn btn-white line-height-2" onClick="window.location='index.html'" value="返回"/>
+    <input type="button" class="btn btn-blue line-height-2 margin-l-15" onClick="window.location='index.html'" value="发布"/>
+    </div>
+  </div>
+</div>
+</body>
+</html>

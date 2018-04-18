@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"/>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="yes" name="apple-touch-fullscreen" />
+<meta content="telephone=no" name="format-detection" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<link rel="stylesheet" href="/sp/public/weui/css/weui.css">
+<link rel="stylesheet" href="/sp/public/weui/css/weui2.css"/>
+<link rel="stylesheet" href="/sp/public/weui/css/weui3.css"/>
+<script src="/sp/public/js/zepto.min.js"></script> 
+<script src="https://gw.alipayobjects.com/os/antv/assets/g2/3.0.5-beta.5/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/data-set/0.8.6/data-set.min.js"></script>
+<script>G2.Global.setTheme('dark');</script>
+<style type="text/css">
+.backColor{
+background-color:rgba(31,31,31,1)
+}
+.font{
+text-indent:5px;
+margin: 0;
+padding: 0;
+line-height: 1.5em;
+font-family: "Times New Roman", Times, serif;
+font-size: 14px;
+color: #1890FF;
+}
+</style>
+<script type="text/javascript">
+var chart ;
+var count = 0;
+$(function(){
+	chart = new G2.Chart({
+	    container: 'mountNode',
+	    forceFit: true,
+	    height:300
+	  });
+	initChat();
+	initPie();
+	$("#change").click(function(){
+		if(count == 0){
+			$("#title").html('用水统计（月）');
+			doChange();
+			count =1;
+		}else{
+			$("#title").html('用水统计（日）');
+			initChat();
+			count =0;
+		}
+	})
+});
+function initChat(){
+	chart.clear();
+	var data = [
+	    { year: '04/02', value:80 },
+	    { year: '04/03', value:100 },
+	    { year: '04/04', value:100 },
+	    { year: '04/05', value:150 },
+	    { year: '04/06', value:300 },
+	    { year: '04/07', value:350 },
+	    { year: '04/08', value:400 }
+	  ];
+	  chart.source(data);
+	  chart.scale({
+		    value: {
+		      min: 0
+		    },
+		    year: {
+		      range: [ 0 , 1 ]
+		    }
+		  });
+	  chart.tooltip({
+	    crosshairs: {
+	      type: 'line'
+	    }
+	  });
+	  chart.area().position('year*value');
+	  chart.line().position('year*value').size(2);
+	  chart.render();
+}
+function doChange(){
+	chart.clear();
+	var data_2 = [
+	    { year: '17/07', value:80 },
+	    { year: '17/08', value:150 },
+	    { year: '17/09', value:150 },
+	    { year: '17/10', value:150 },
+	    { year: '17/11', value:350 },
+	    { year: '17/12', value:350 },
+	    { year: '17/13', value:600 }
+	  ];
+	  chart.source(data_2);
+	  chart.scale('value', {
+	    min: 0
+	  });
+	  chart.scale('year', {
+	    range: [ 0 , 1 ]
+	  });
+	  chart.tooltip({
+	    crosshairs: {
+	      type: 'line'
+	    }
+	  });
+	   chart.area().position('year*value');
+	  chart.line().position('year*value').size(2);
+	  chart.changeData(data_2);
+}
+
+function initPie(){
+	const { DataView } = DataSet;
+	  const data = [
+	    { item: ' 03-01', flushingtime:14 },
+	    { item: ' 03-02', flushingtime:11},
+	    { item: ' 03-03', flushingtime:10 },
+	    { item: ' 03-04', flushingtime:40},
+	    { item: ' 03-05', flushingtime:62},
+	    { item: ' 03-06', flushingtime:54},
+	    { item: ' 03-07', flushingtime:80}
+
+	  ];
+	  const dv = new DataView().source(data);
+	  dv.transform({
+	      type: 'fold',
+	      fields: [ 'flushingtime' ], // 展开字段集
+	      key: 'user', // key字段
+	      value: 'score', // value字段
+	    });
+	  const chart = new G2.Chart({
+	    container: 'mountNode_',
+	    forceFit: true,
+	    height:400,
+	    padding: [ 20, 20, 95, 20 ]
+	  });
+	  chart.source(dv, {
+	    score: {
+	      min: 0,
+	      max: 80
+	    }
+	  });
+	  chart.coord('polar', {
+	    radius: 0.8
+	  });
+	  chart.axis('item', {
+	    line: null,
+	    tickLine: null,
+	    grid: {
+	      lineStyle: {
+	        lineDash: null
+	      },
+	      hideFirstLine: false
+	    }
+	  });
+	  chart.axis('score', {
+	    line: null,
+	    tickLine: null,
+	    grid: {
+	      type: 'polygon',
+	      lineStyle: {
+	        lineDash: null
+	      }
+	    }
+	  });
+	  chart.legend('user', {
+	    marker: 'circle',
+	    offset: 30
+	  });
+	  chart.line().position('item*score').color('user').size(2);
+	  chart.point().position('item*score').color('user').shape('circle').size(4).style({
+	    stroke: '#fff',
+	    lineWidth: 1,
+	    fillOpacity: 1
+	  });
+	  chart.area().position('item*score').color('user');
+	  chart.render();
+	  chart.on('point:click', ev => {
+		  if("" !=ev.data._origin.item){
+			  window.location.href="../../../sp/mobile/Skip/toRushWater?time="+ev.data._origin.item;
+		  }
+	  });
+}
+</script>
+</head>
+<body ontouchstart class="backColor">
+	<div class="page-bd">
+		<div class="weui-flex">
+            <div class="weui-flex-item"><div class="placeholder backColor"  style="color:gray;">当前状态：<span class='f-red'>异常D048</span></div></div>
+            <div class="weui-flex-item"><div class="placeholder backColor"  ><span class='f-red'>电磁阀故障</span></div></div>
+        </div>
+        <div class="weui-flex"style="margin-top:-20px;">
+        	<div class="weui-flex-item">
+	        	<div class="placeholder backColor"  >
+	        		<img alt="" src="/sp/public/images/rush/9.png" style="width:100%;height:300px;">
+	        	</div>
+        	</div>
+        </div>
+        <div class="weui-flex" style="margin-top:250px;">
+        	<div class="weui-flex-item">
+	        	<div class="placeholder backColor" >
+	        		<table style="width:100%;" border="0">
+	        			<tr>
+	        				<td align="right"><span id="title" style="color:gray;">用水量统计（日） </span></td>
+	        				<td align="center" style="position:relative;top:80%; transform: translateY(0%);width:25%"><span ><a href="javascript:;" id="change" class="weui_btn weui_btn_mini bg-blue-b">切换</a></span></td>
+	        			</tr>
+	        		</table>
+	        		 <div id="mountNode"></div>
+	        	</div>
+        	</div>
+        </div>
+        <div class="weui-flex" style="margin-top:270px;">
+        	<div class="weui-flex-item">
+	        	<div class="placeholder backColor"   >
+	        	    <table style="width:65%;" border="0">
+	        			<tr>
+	        				<td align="right"><p id="title" style="color:gray;">冲水次数统计</p></td>
+	        			</tr>
+	        		</table>
+	        		 <div id="mountNode_"></div>
+	        	</div>
+        	</div>
+        </div>
+        <div class="weui-flex" style="margin-top:369px;">
+            <div class="weui-flex-item">
+            	<div class="placeholder backColor">
+            		<p class="font">据统计，03-07日用水量最大，为80，高于平均水量40。该日冲水次数为7次，其中12:00 - 14:00时段冲水较为频繁。</p>
+            	</div>
+            </div>
+        </div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"/>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="yes" name="apple-touch-fullscreen" />
+<meta content="telephone=no" name="format-detection" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<link href="/sp/public/bootstrap/css/bootstrap.css" rel="stylesheet"  type="text/css">
+<link href="/sp/public/bootstrap/css/bootstrap-theme.css" rel="stylesheet"  type="text/css">
+<link href="/sp/public/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet"  type="text/css">
+<link href="https://cdn.bootcss.com/Ladda/1.0.6/ladda-themeless.min.css" rel="stylesheet">
+<script src="/sp/public/jquery/js/jquery-2.0.3.min.js" type="text/javascript"></script>
+<script src="/sp/public/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+<script src="https://cdn.bootcss.com/Ladda/1.0.6/spin.min.js"></script>
+<script src="https://cdn.bootcss.com/Ladda/1.0.6/ladda.min.js"></script>
+<script src="/sp/public/myself/js/config.js"type="text/javascript"></script>
+<style type="text/css">
+.radiu{
+	width: 50px;
+	height: 50px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%; 
+	background-color:#73CBF5;
+ }
+</style>
+<title>打印配置</title>
+</head>
+<body>
+<div class="container">
+    <div id="login" class="btn-toolbar" style="text-align:right;display:none;">
+		<div class="radiu" style="background-image: url('');background-size:100%;background-repeat: no-repeat;float:right;display:none;">
+        </div>
+	</div>
+	 <!-- title -->
+	<div class="page-header">
+	    <h1>打印设置</h1>
+	</div>
+	 <div class="row clearfix">
+	 	<div class="col-md-12 column">
+	 		<div class="list-group">
+	 			<div class="list-group-item">
+	 				<span class="badge badge-pill badge-default" style="background:white;">
+	 					<button type="button" id="minus" class="btn btn-default btn-xs button-minus" ><span class="glyphicon glyphicon-minus"></span></button>
+	 					<input type="text"    id="copies"   placeholder="1" style="border:1px;width:10px;" readonly="readonly">
+	 					<input type="hidden"  id="copies_val" value="1">
+	 					<button type="button" id="plus" class="btn btn-default btn-xs button-plus" ><span class="glyphicon glyphicon-plus"></span></button>
+	 				</span>打印份数
+	 			</div>
+				<div class="list-group-item">
+					 <span class="badge">全部</span>打印范围
+				</div>
+				<div class="list-group-item">
+					 <span class="badge">
+					 A4
+					 </span>纸张类型
+				</div>
+				<div class="list-group-item">
+					 <span class="badge">黑白</span>纸张色彩
+				</div> 
+				<div class="list-group-item">
+					 <span class="badge">单面</span>双面打印
+				</div> 
+	 		</div>
+	 		<div class="list-group">
+	 			<div class="list-group-item">
+					 <span class="badge" style="color:red;background:white;"><font>¥</font><font id="price"></font></span>
+					 <span id="fileName"></span>
+				</div>
+	 		</div>
+	 	</div>
+	 </div>
+	 <button type="button" class="btn btn-primary btn-lg btn-block ladda-button"  id="save"> <span class="ladda-label"></span>提交支付</button>
+</div>
+</body>
+</html>

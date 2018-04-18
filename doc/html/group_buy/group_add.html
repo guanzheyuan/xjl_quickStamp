@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+<link rel="stylesheet" href="../css/style.css">
+<title>团购</title>
+</head>
+
+<body>
+<div class="main">
+  <div class="row padded-t-20">
+    <div class="border padded-5">
+      <input type="text" value="请输入团购标题"
+    onfocus="if (value =='请输入团购标题'){value =''}"
+    onblur="if (value ==''){value='请输入团购标题'}"  />
+    </div>
+    <div class="margin-t-10 bgdefault padded-t-5 padded-r-10 padded-b-10 padded-l-10"> <span>书虫</span><span class="margin-l-10 text-auxiliary">￥20.00</span>
+      <input type="button" value="X" class="fr btn bgdefault text-default"/>
+    </div>
+    <div class="margin-t-10 bgdefault padded-t-5 padded-r-10 padded-b-10 padded-l-10"> <span>书虫</span><span class="margin-l-10 text-auxiliary">￥20.00</span>
+      <input type="button" value="X" class="fr btn bgdefault text-default"/>
+    </div>
+    <div class="padded-t-5 padded-b-5 margin-b-15 margin-t-10 clearfix">
+      <div class="fl wid60 border padded-l-5"><input type="text" value="名称" onFocus="if (value =='名称'){value =''}"
+    onblur="if (value ==''){value='名称'}"/></div>
+      <div class="fl wid20 border padded-l-5 margin-l-5"><input type="text" value="价格" onFocus="if (value =='价格'){value =''}"
+    onblur="if (value ==''){value='价格'}"/></div>
+      <div class="fr wid15"><input type="button" class="btn fr bg-info" value="添加"/></div>
+    </div>
+    <div class="margin-10"><span>合计：</span><span>3个,</span><span class="margin-l-10">共35元</span></div>
+    <div class="margin-10 clearfix"><span class="fl">结束时间：</span><div class="border padded-l-5 wid60 fl"><input type="text" value="2017-09-12&nbsp;16:20"/></div><div class="fl border padded-3"><img src="../images/date.png"/></div></div>
+    <div class="margin-t-15 margin-b-15 btnbox">
+    <input type="button" class="btn btn-white line-height-2" onClick="window.location='index.html'" value="取消"/>
+    <input type="button" class="btn btn-blue line-height-2 margin-l-15" onClick="window.location='index.html'" value="发布"/>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<div class="sectionBox" ng-show="state=='list'">
+	<div class="tit">
+		<h1>团购列表</h1>
+	</div>
+	<div class="searchDiv" style="background:none;">
+		<input type="text" class="txt" placeholder="关键字，范围：列名" ng-model="searchText" />
+		<input type="button" value="查&nbsp;询" class="btnYellow c2" ng-click="search()" />
+		<input type="button" value="重&nbsp;置" class="btnGray c1" ng-click="reset()" />
+		<input type="button" ng-click="gotoAdd()" value="新&nbsp;增" class="btnAdd btnYellow c2" />	</div>
+	<div class="thDiv">
+		<span class="t14">编号</span>
+		<span class="t18">团购标题</span>
+		<span class="t25">开始时间</span>
+		<span class="t25">结束时间</span>
+		<span class="t14">操作</span>
+	</div>
+	<ul class="th_list clearfix">
+		<li class="txtCt gray" ng-if="total==0">暂无数据</li>
+		<li ng-repeat="obj in objs" ng-class="{bg:$odd}" ng-if="total>0" >
+		<span class="t14">{{(pageIndex-1)*pageSize+$index+1}}</span>
+		<span class="t18">{{obj.groupBuyTitle}}</span>
+		<span class="t25">{{obj.groupBuyBeginTime}}</span>
+		<span class="t25">{{obj.groupBuyEndTime}}</span>
+		<span class="t14">
+			<a class="pdR10" title="EXCEL下载" ng-click="printExcel(obj)">下载统计</a>
+			<!-- <a ng-click="objDelete(obj)" class="red pdL10">删除</a> -->
+		</span>
+		</li>
+	</ul>
+	<div class="page">
+		<span>共{{pages}}页&nbsp;/&nbsp;{{total}}条记录 &nbsp;&nbsp;当前第{{pageIndex}}页</span>
+		<a ng-click="home()">首页</a><a ng-click="prev()">上一页</a><a ng-click="next()">下一页</a>
+		<a ng-click="last()">尾页</a>
+	</div>
+</div>
+<div class="sectionBox" ng-show="state=='edit'">
+	<div class="tit">
+		<h1>用户管理-{{stateInfo}}</h1>
+	</div>
+	<div class="txtBox" style="padding-left:100px;">
+		<dl>
+			<dt>参数名1</dt>
+			<dd>
+				<input type="text" class="txt2 width420" placeholder="列名" ng-model="obj.col"/>
+				<span class="error"><b>{{currentError.mask}}</b></span>
+			</dd>
+		</dl>
+		<dl>
+			<dt>参数名2</dt>
+			<dd>
+				<input type="text" class="txt2 width420" placeholder="列名2" ng-model="obj.col2"/>
+				<span class="error"><b>{{currentError.mask}}</b></span>
+			</dd>
+		</dl>
+		<dl>
+		<dt></dt>
+		<dd>
+			<input type="button" ng-click="objSave()" value="确&nbsp;&nbsp;定" class="btnYellow c2 pdLR">
+			<input type="button" value="取&nbsp;消" class="btnGray c1" ng-click="save_cancel()">
+		</dd>
+		</dl>
+	</div>
+</div>

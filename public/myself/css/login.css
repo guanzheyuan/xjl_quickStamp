@@ -1,0 +1,18 @@
+.icon{
+  font-size: 30px;
+  line-height: 40px;
+  margin: 5px 0;
+  -webkit-transition: font-size 0.25s ease-out 0s;
+  -moz-transition: font-size 0.25s ease-out 0s;
+  transition: font-size 0.25s ease-out 0s;
+
+}
+.color_wechat{
+ color:#67AD41;
+}
+.color_qq{
+  color:#67A5CD
+}
+.icon:hover{
+  font-size: 32px;
+}

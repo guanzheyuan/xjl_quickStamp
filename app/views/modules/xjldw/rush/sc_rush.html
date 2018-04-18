@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"/>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="yes" name="apple-touch-fullscreen" />
+<meta content="telephone=no" name="format-detection" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<link rel="stylesheet" href="/sp/public/weui/css/weui.css">
+<link rel="stylesheet" href="/sp/public/weui/css/weui2.css"/>
+<link rel="stylesheet" href="/sp/public/weui/css/weui3.css"/>
+<script src="/sp/public/js/zepto.min.js"></script> 
+<script type="text/javascript">
+$(function(){
+	$(".weui_cell").click(function(){
+		window.location.href="../../../sp/mobile/Skip/toRushChat";
+	});
+})
+</script>
+</head>
+<body ontouchstart style="background-color: #f8f8f8;">
+<div class="weui_cells">
+     <div class="weui_cell"  >
+	     <div class="weui_cell_bd weui_cell_primary">
+	         <p>5#4男厕1</p>
+	     </div>
+	     <div class="weui_cell_bd" style="margin-right:50%;"><span class='f-green'>运行</span></div>
+	     <div class="weui_cell_ft"><a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary">强冲</a></div>
+     </div>
+      <div class="weui_cell" id="click">
+	     <div class="weui_cell_bd weui_cell_primary">
+	         <p>5#4男厕2</p>
+	     </div>
+	     <div class="weui_cell_bd" style="margin-right:50%;"><span class='f-gray'>冲水</span></div>
+	     <div class="weui_cell_ft"><a href="javascript:;" class="weui_btn weui_btn_disabled weui_btn_mini weui_btn_default">强冲</a></div>
+     </div>
+      <div class="weui_cell" id="click">
+	     <div class="weui_cell_bd weui_cell_primary">
+	         <p>5#4男厕3</p>
+	     </div>
+	      <div class="weui_cell_bd" style="margin-right:50%;"><span class='f-red'>异常</span></div>
+	     <div class="weui_cell_ft"><a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary">强冲</a></div>
+     </div>
+</div> 
+<div style="background-image:url('/sp/public/images/rush/8.png');background-size:40%;background-repeat:no-repeat;background-position-x:center;background-position-y:center; width:100%;height:550px;">
+</div>
+</body>
+</html>
