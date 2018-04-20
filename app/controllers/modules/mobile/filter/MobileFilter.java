@@ -13,6 +13,8 @@ import play.Logger;
 import play.cache.Cache;
 import play.i18n.Messages;
 import play.mvc.Before;
+import play.mvc.Http;
+import play.mvc.Http.Request;
 import utils.CommonValidateUtil;
 import utils.DateUtil;
 import utils.HttpClientUtil;
@@ -36,6 +38,7 @@ public class MobileFilter extends BaseController{
 	@Before(unless = { "Application.index","LoginService.index", "LoginService.mIndex","LoginService.login",
 			"LoginService.logout","LoginService.mlogout" })
 	static void checkLogin() {
+		Http.Response.current().setHeader("Access-Control-Allow-Origin","*");
 		log.debug("checkLogin开始检查登录状态");
 		String userAgent = request.headers.get("user-agent").value().toLowerCase();
 		boolean isNeedInterface =false;

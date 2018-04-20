@@ -104,6 +104,57 @@ public class HttpClientUtil extends BaseController{
 	}
 	
 	/**
+	 * 请求接口类
+	 * @param url
+	 * @param requestMethod
+	 * @param json
+	 * @return
+	 */
+	public static String invoke_cross(String url, String requestMethod,
+			JSONObject json) {
+		HttpURLConnection http = null;
+		JSONObject retJsonObject = new JSONObject();
+		JSONObject head = new JSONObject();
+		retJsonObject.put("HEAD", head);
+		head.put("retFlag", "-1");
+		try {
+			System.setProperty("jsse.enableSNIExtension", "false");
+
+			URL urlGet = new URL(url);
+			http = (HttpURLConnection) urlGet.openConnection();
+			http.setRequestMethod(requestMethod); // 必须是get方式请求
+			http.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded");
+			http.setDoOutput(true);
+			http.setDoInput(true);
+			System.setProperty("sun.net.client.defaultConnectTimeout", "30000");// 连接超时30秒
+			System.setProperty("sun.net.client.defaultReadTimeout", "30000"); // 读取超时30秒
+
+			// post信息
+			if (json != null) {
+				OutputStream os = http.getOutputStream();
+
+				os.write(json.toString().getBytes());
+				os.close();
+			}
+
+			http.connect();
+			InputStream is = http.getInputStream();
+			String message = IOUtils.toString(is);
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			Logger.error(e, "", "");
+			retJsonObject.put("error", e.getMessage() + e.getLocalizedMessage()
+					+ e.getCause().toString());
+		} finally {
+			if (http != null) {
+				http.disconnect();
+			}
+		}
+		return "";
+	}
+	/**
 	 * 网络请求，返回数据流
 	 * @param url 请求的URL地址
 	 * @param json POST请求带的JSON对象参数

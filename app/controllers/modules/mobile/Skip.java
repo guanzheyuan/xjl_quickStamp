@@ -7,6 +7,7 @@ import models.modules.mobile.WxServer;
 import models.modules.mobile.WxUser;
 import play.Logger;
 import play.i18n.Messages;
+import play.mvc.Http;
 import utils.StringUtil;
 import utils.WxPushMsg;
 public class Skip extends MobileFilter {

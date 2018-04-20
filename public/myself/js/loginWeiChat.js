@@ -45,7 +45,6 @@ function accessory_Date(){
 		url:'/sp/mobile/Execute/uploadListPage?flag='+flag,
 		type:'post',
 		success:function(data){
-			console.log(data);
 			if(data.data){
 				var ret = data.data.data;
 				var html;

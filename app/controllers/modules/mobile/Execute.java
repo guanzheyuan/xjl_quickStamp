@@ -36,6 +36,7 @@ import models.modules.mobile.WxServer;
 import models.modules.mobile.WxUser;
 import models.modules.mobile.XjlDwFile;
 import models.modules.mobile.XjlStampSet;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import play.Logger;
 import play.Play;
@@ -62,6 +63,8 @@ public class Execute  extends MobileFilter {
 	private final static String SUFFIX_XLSX="xlsx";
 	private final static String SUFFIX_PDF="pdf";
 	
+	
+	private final static String TOLIETLISTURL="http://47.98.200.5:8080/watersaving/api/toilet/list";
 	/**
 	 * 初始化微信登录操作
 	 */
@@ -340,5 +343,12 @@ public class Execute  extends MobileFilter {
 	}
 	private static void setSessionInfo(SessionInfo sessionInfo){
 		Cache.set(getSessionKey(), sessionInfo);
+	}
+	
+	/**——----------------------------------RUSH---------------------------------------------——**/
+	
+	public static void queryTolietList(){
+		String json = HttpClientUtil.invoke_cross(TOLIETLISTURL, "POST",null);
+		ok(json);
 	}
 }
