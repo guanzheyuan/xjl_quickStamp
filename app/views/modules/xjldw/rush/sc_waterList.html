@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -12,8 +12,49 @@
 <link rel="stylesheet" href="/sp/public/weui/css/weui.css">
 <link rel="stylesheet" href="/sp/public/weui/css/weui2.css"/>
 <link rel="stylesheet" href="/sp/public/weui/css/weui3.css"/>
+<script src="/dw/public/widgets/layer.m/layer.m.js"></script>
+<script src="/sp/public/widgets/zeptojs/zepto.min.js"></script>
+<script src="/sp/public/widgets/dropload/dropload.min.js"></script>
+<script src="/sp/public/widgets/angularjs/angular.min.js"></script>
+<script src="/sp/public/widgets/angularjs/angular-touch.min.js"></script>
+<script src="/sp/public/js/zepto.min.js"></script> 
+<script type="text/javascript">
+angular.module('app', ['ngTouch'])
+	.value('appValue', {
+	    index: 1,
+	    size: 10
+	})
+	 .factory('agentChat_time',['$http','appValue',function($http, appValue){
+			return {
+				getData:function(number,size){
+					return $http({
+						method:'JSONP',
+						url:'http://47.98.200.5:8080/watersaving/api/flush/curDateFlush?callback=queryChat_Time',
+						params:{
+							createTime:'${time}'
+						}
+					});
+				}
+			}
+	 }])
+	 .controller('MainController',['$scope','appValue','agentChat_time','$timeout',function($scope, appValue,agentChat_time,$timeout){
+		 $scope.lists = [];
+		 $scope.agentWater = function(){
+			 agentChat_time.getData().then(function(response){
+			 },function(resphonse){
+			 });
+		 }
+		 window.queryChat_Time = function(data){
+			 console.log(data);
+			 if(data.length >0){
+				 $scope.lists = data;
+			 }
+		 }
+		 $scope.agentWater();
+	 }]);
+</script>
 </head>
-<body ontouchstart style="background-color: #f8f8f8;">
+<body ng-cloak ng-controller="MainController" style="background-color: #f8f8f8;">
 <div class="page-bd">
 	<div class="weui-flex">
          <div class="weui-flex-item"><div class="placeholder" style="background-color:#F8F8F8;">${time}</div></div>
@@ -23,10 +64,14 @@
      <thead>
      <tr><th>时间</th><th>冲水量</th></tr>
      </thead>
-     <tbody>
-     <tr><td>17:00</td><td>100</td></tr>
-     <tr><td>20:00</td><td>200</td></tr>
-     <tr><td>21:00</td><td>150</td></tr>
+     <tbody ng-if="lists.length == 0">
+     <tr ><td colspan="2">暂无数据...</td></tr>
+     </tbody>
+     <tbody ng-if="lists.length >0">
+     	<tr ng-repeat="water in lists">
+     		<td>{{water.createTime}}</td>
+     		<td>{{water.flushValue}}</td>
+     	</tr>
      </tbody>
  </table>
 </body>

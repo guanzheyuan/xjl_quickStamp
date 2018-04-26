@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -9,43 +9,179 @@
 <meta content="yes" name="apple-touch-fullscreen" />
 <meta content="telephone=no" name="format-detection" />
 <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<link rel="stylesheet" href="/sp/public/css/main.css" />
 <link rel="stylesheet" href="/sp/public/weui/css/weui.css">
 <link rel="stylesheet" href="/sp/public/weui/css/weui2.css"/>
 <link rel="stylesheet" href="/sp/public/weui/css/weui3.css"/>
+<script src="/dw/public/widgets/layer.m/layer.m.js"></script>
+<script src="/sp/public/widgets/zeptojs/zepto.min.js"></script>
+<script src="/sp/public/widgets/dropload/dropload.min.js"></script>
+<script src="/sp/public/widgets/angularjs/angular.min.js"></script>
+<script src="/sp/public/widgets/angularjs/angular-touch.min.js"></script>
 <script src="/sp/public/js/zepto.min.js"></script> 
 <script src="/sp/public/rush/js/rush.js"type="text/javascript"></script>
 <script type="text/javascript">
-$(function(){
-	$(".weui_cell").click(function(){
-		window.location.href="../../../sp/mobile/Skip/toRushChat";
-	});
-})
+angular.module('app', ['ngTouch'])
+		.value('appValue', {
+		    index: 1,
+		    size: 10
+		})
+		.factory('agentRemote',['$http','appValue',function($http, appValue){
+			return {
+				getData:function(number,size){
+					return $http({
+						method:'JSONP',
+						url:'http://47.98.200.5:8080/watersaving/api/toilet/list?callback=querytoliet',
+						params:{
+							pageNumber:number, 
+							pageSize:size,
+							toiletName:''
+						}
+					});
+				}
+			}
+		}])
+		.factory('agentRemoteInfo',['$http','appValue',function($http, appValue){
+			return {
+				getData:function(toiletName){
+					return $http({
+						method:'JSONP',
+						url:'http://47.98.200.5:8080/watersaving/api/toilet/list?callback=tolietInfo',
+						params:{
+							pageNumber:1,
+							pageSize:10,
+							toiletName:toiletName
+						}
+					});
+				}
+			}
+		}])
+		.factory('handle',['$http','appValue',function($http, appValue){
+			return {
+				flushOpen:function(deviceCode){
+					return $http({
+						method:'JSONP',
+						url:'http://47.98.200.5:8080/watersaving/api/toilet/flushOpenCmd?callback=flushToliet',
+						params:{
+							deviceCode:deviceCode
+						}
+					});
+				}
+			}
+		}])
+		.controller('MainController',['$scope','appValue','agentRemote','agentRemoteInfo','handle','$timeout',function($scope, appValue, agentRemote,agentRemoteInfo,handle,$timeout){
+		    $scope.lists = [];
+		    
+		    //详细信息
+		    $scope.agentRemoteInfo = function(toiletName){
+		    	agentRemoteInfo.getData(toiletName).then(function(response){
+		    		
+		    	},function(response){
+		    	}); 
+		    }
+		    //详细信息callback
+		    window.tolietInfo = function(data){
+		    	if(data.rows.length > 0){
+		    		window.location.href="../../../sp/mobile/Skip/toRushChat?status="+data.rows[0].status;
+		    	}else{
+		    		$.toast('暂无数据', "cancel");
+		    	}
+		    }
+		    //强冲操作
+		    $scope.flushOpen = function(deviceCode){
+		    	console.log('------------------');
+		    	console.log('设备号：'+deviceCode);
+		    	handle.flushOpen(deviceCode).then(function(response){
+		    	},function(response){
+		    	}); 
+		    }
+		    //强冲callback
+		    window.flushToliet = function(data){
+		    	console.log('---------返回结果');
+		    	console.log(data);
+		    	if(data.code == '0'){
+		    		 $.toast(data.msg);
+		    	}else{
+		    		$.toast(data.msg, "cancel");
+		    	}
+		    }
+		    //拖拽刷新
+		    $scope.nextPage = function(me){
+		    	console.log(++appValue.index);
+		    	console.log(++appValue.size);
+		    	agentRemote.getData(1,++appValue.size).then(function (response) {
+                }, function (response) {
+                	console.log(response);
+                });
+		    }
+		    //初始化
+			$scope.initPage = function (me) {
+				 agentRemote.getData(1,10).then(function (response) {
+                 }, function (response) {
+                 });
+			 }
+		     //初始化callback
+			 window.querytoliet = function(data){
+				 console.log('-------------');
+				 if(data.rows.length > 0){
+					 $scope.lists = data.rows;
+				 }
+				 console.log($scope.lists);
+				 console.log('-------------')
+			 }
+			 $scope.initPage();
+			$('#scroller').dropload({
+                 domUp: {
+                     domClass: 'dropload-up',
+                     domRefresh: '<div class="dropload-refresh">↓下拉刷新</div>',
+                     domUpdate: '<div class="dropload-update">↑释放更新</div>',
+                     domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>'
+                 },
+                 domDown: {
+                     domClass: 'dropload-down',
+                     domRefresh: '<div class="dropload-refresh">↑上拉加载更多</div>',
+                     domUpdate: '<div class="dropload-update">↓释放加载</div>',
+                     domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>'
+                 },
+                 scrollArea: window,
+                 loadUpFn: function (me) {
+                     console.log('down');
+                     $scope.nextPage();
+                     me.resetload();
+                 },
+                 loadDownFn: function (me) {
+                     console.log('up');
+                     me.resetload();
+                 }
+             });
+		}])
 </script>
 </head>
-<body ontouchstart style="background-color: #f8f8f8;">
-<div class="weui_cells">
-     <div class="weui_cell"  >
-	     <div class="weui_cell_bd weui_cell_primary">
-	         <p>5#4男厕1</p>
-	     </div>
-	     <div class="weui_cell_bd" style="margin-right:50%;"><span class='f-green'>运行</span></div>
-	     <div class="weui_cell_ft"><a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary">强冲</a></div>
-     </div>
-      <div class="weui_cell" id="click">
-	     <div class="weui_cell_bd weui_cell_primary">
-	         <p>5#4男厕2</p>
-	     </div>
-	     <div class="weui_cell_bd" style="margin-right:50%;"><span class='f-gray'>冲水</span></div>
-	     <div class="weui_cell_ft"><a href="javascript:;" class="weui_btn weui_btn_disabled weui_btn_mini weui_btn_default">强冲</a></div>
-     </div>
-      <div class="weui_cell" id="click">
-	     <div class="weui_cell_bd weui_cell_primary">
-	         <p>5#4男厕3</p>
-	     </div>
-	      <div class="weui_cell_bd" style="margin-right:50%;"><span class='f-red'>异常</span></div>
-	     <div class="weui_cell_ft"><a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary">强冲</a></div>
-     </div>
-</div> 
+<body ng-cloak ng-controller="MainController"   style="background-color: #f8f8f8;">
+<div class="main">
+	<div class="content" id="scroller" ng-show="lists.length!=0" >
+			<div class="weui_cells" >
+		     <div class="weui_cell"  ng-repeat="toilet in lists">
+			     <div class="weui_cell_bd weui_cell_primary" ng-click="agentRemoteInfo('{{toilet.toiletName}}')">
+			         <p class="f-blue" style="font-size:18px;">{{toilet.toiletName}}</p>
+			     </div>
+			     <div class="weui_cell_bd" style="margin-right:30%;" ng-if="toilet.status == 1" ng-click="agentRemoteInfo('{{toilet.toiletName}}')"><span class='f-green'>运行</span></div>
+			     <div class="weui_cell_bd" style="margin-right:30%;" ng-if="toilet.status == 2" ng-click="agentRemoteInfo('{{toilet.toiletName}}')"><span class='f-gray'>冲水</span></div>
+			     <div class="weui_cell_bd" style="margin-right:30%;" ng-if="toilet.status == 3" ng-click="agentRemoteInfo('{{toilet.toiletName}}')"><span class='f-red'>异常</span></div>
+			      <div class="weui_cell_bd" style="margin-right:30%;" ng-if="toilet.status == 4" ng-click="agentRemoteInfo('{{toilet.toiletName}}')"><span class='f-red'>离线</span></div>
+			     <div class="weui_cell_ft" >
+			     <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" ng-if="toilet.status == 1 || toilet.status == 3  " ng-click="flushOpen('{{toilet.deviceCode}}')">强冲</a>
+			     <a href="javascript:;" class="weui_btn weui_btn_disabled weui_btn_mini weui_btn_default" ng-if="toilet.status == 2 || toilet.status == 4 ">强冲</a>
+			     </div>
+		     </div>
+			</div> 
+			<div class="dropload-down">
+		      	<div class="dropload-refresh">
+	                  当前<span ng-bind="lists.length"></span>条记录 总共<span ng-bind="total"></span>条记录(滑动刷新)
+		       </div>
+      		</div>
+	</div>
+</div>
 <div style="background-image:url('/sp/public/images/rush/8.png');background-size:40%;background-repeat:no-repeat;background-position-x:center;background-position-y:center; width:100%;height:550px;">
 </div>
 </body>

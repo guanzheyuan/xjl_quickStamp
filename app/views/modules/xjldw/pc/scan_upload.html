@@ -68,7 +68,10 @@
 				 ajaxReturn.done(function(data){
 					 console.log('down');
 					 setTimeout(function(){
-						 getSessionUser();
+						 if(getSessionUser()){
+							 $("#upload-file").attr('disabled',false);
+						     $("#userInfo").attr('disabled',false);
+						 }
 					 },2000)
 				 })
 				 clearTimeout(wxChat);

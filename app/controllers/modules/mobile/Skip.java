@@ -64,6 +64,7 @@ public class Skip extends MobileFilter {
 	}
 	
 	public static void toRushChat(){
+		renderArgs.put("status",params.get("status"));
 		render("modules/xjldw/rush/sc_chat.html");
 	}
 	public static void toRushChat1(){
