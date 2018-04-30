@@ -81,9 +81,8 @@ angular.module('app', ['ngTouch'])
 			}
 	 }])
 	 .controller('MainController',['$scope','appValue','agentChat','agentChat_change','agentChat_count','agentChat_desc','$timeout',function($scope, appValue, agentChat,agentChat_change,agentChat_count,agentChat_desc,$timeout){
-		 var chart = new G2.Chart({container: 'mountNode', forceFit: true, height:300 });
-		 var count = 0;
-		 
+		 var chart = new G2.Chart({container: 'mountNode',height:300,width:350 });
+		 $scope.count = 0;
 		 //得到最大数值
 		 function queryMaxValue(data){
 			 var value = 0;
@@ -112,6 +111,15 @@ angular.module('app', ['ngTouch'])
 		        var currentdate =  month + seperator1 + strDate;
 		        return currentdate;
 		    }
+		 /*获取上个月*/  
+		 function getPreMonth(i) { 
+			 var dd = new Date();
+			 dd.setMonth(dd.getMonth() -parseInt(i));
+			 var y = dd.getFullYear();   
+			 var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0    
+			 var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0    
+			 return m+"";  
+		 }  
 		 //计算日期
 		 function GetDateStr(AddDayCount) {  
 			   var dd = new Date();    
@@ -123,7 +131,6 @@ angular.module('app', ['ngTouch'])
 			} 
 		 //作为教研数据是否完整
 		 function repair(data){
-			 var arr = [];
 			 var flag = false;
 			 var _temp = null;
 			 var newDate = [];
@@ -149,11 +156,48 @@ angular.module('app', ['ngTouch'])
 						 newDate.unshift(person);
 					 }
 				 }
+			 }else{
+				 newDate = data;
 			 }
 			 return newDate;
 		 }
+		 //格式化月份
+		 function formatte_Month(data){
+			 var newDate = [];
+			 var flag = false;
+			 var _temp = null;
+			 if(data.length <7){
+				 for(var i=0;i<7;i++){
+					 flag = false;
+					 for(var j = 0;j<data.length;j++){
+						 if(getPreMonth(i) == data[j].statDate){
+							 _temp = new Object();
+							 _temp.statDate = data[j].statDate;
+							 _temp.flushValue = data[j].flushValue;
+							 flag = true;
+						 }
+					 }
+					 if(flag){
+						 newDate.unshift(_temp);
+					 }
+					 if(!flag){
+						 var person = new Object();
+						 person.statDate = getPreMonth(i);
+						 person.flushValue = 0;
+						 newDate.unshift(person);
+					 }
+				 }
+			 }else{
+				 newDate = data;
+			 }
+			 return newDate;
+		 }
+		 //格式化天
 		 function formatter(data){
 			 for(var i =0;i<data.length;i++){
+				 if(data[i].flushValue < 0){
+					 data[i].flushValue = data[i].flushValue.replace('-','');
+				 }
 				 data[i].statDate = data[i].statDate.toString().substring(5,data[i].statDate.length);
 			 }
 		 }
@@ -242,14 +286,14 @@ angular.module('app', ['ngTouch'])
 			 }
 		 }
 		 $scope.chatChange = function(){
-			 if(count == 0){
+			 if($scope.count == 0){
 					$("#title").html('用水统计（月）');
 					$scope.initChat_Month()
-					count =1;
+					$scope.count =1;
 				}else{
 					$("#title").html('用水统计（日）');
 					$scope.initChat_Day();
-					count =0;
+					$scope.count =0;
 				}
 		 }
 		 
@@ -264,6 +308,7 @@ angular.module('app', ['ngTouch'])
 		 window.queryChat_Month = function(data){
 			 if(data.length > 0){
 				 formatter(data);
+				 data = formatte_Month(data);
 			    chart.clear();
 				var data_2 = data;
 				  chart.source(data_2);
@@ -314,7 +359,8 @@ angular.module('app', ['ngTouch'])
 				  });
 				  chart.area().position('statDate*flushValue');
 				  chart.line().position('statDate*flushValue').size(2);
-				  chart.render();
+				  //chart.render();
+				  chart.changeData(data);
 			 }
 		 }
 	 }]);
