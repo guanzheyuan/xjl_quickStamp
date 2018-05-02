@@ -71,7 +71,16 @@ angular.module('app', ['ngTouch'])
 		}])
 		.controller('MainController',['$scope','appValue','agentRemote','agentRemoteInfo','handle','$timeout',function($scope, appValue, agentRemote,agentRemoteInfo,handle,$timeout){
 		    $scope.lists = [];
-		    
+		    function writeLog(methodName,desc,code){
+				 var parmData = {methodName:methodName,errorDesc:desc,errorCode:code};
+				 $.ajax({
+					 type:'post',
+					 url:'/sp/mobile/Execute/saveScLog',
+					 data:parmData,
+					 success:function(data){
+					 }
+				 });
+			 }
 		    //详细信息
 		    $scope.agentRemoteInfo = function(toiletName){
 		    	agentRemoteInfo.getData(toiletName).then(function(response){
@@ -85,6 +94,7 @@ angular.module('app', ['ngTouch'])
 		    		window.location.href="../../../sp/mobile/Skip/toRushChat?status="+data.rows[0].status;
 		    	}else{
 		    		$.toast('暂无数据', "cancel");
+		    		writeLog('/toilet/list','卫生间详细信息无数据','000')
 		    	}
 		    }
 		    //强冲操作
@@ -103,6 +113,7 @@ angular.module('app', ['ngTouch'])
 		    		 $.toast(data.msg);
 		    	}else{
 		    		$.toast(data.msg, "cancel");
+		    		writeLog('/toilet/flushOpenCmd',data.msg,data.code)
 		    	}
 		    }
 		    //拖拽刷新
@@ -125,6 +136,8 @@ angular.module('app', ['ngTouch'])
 				 console.log('-------------');
 				 if(data.rows.length > 0){
 					 $scope.lists = data.rows;
+				 }else{
+					 writeLog('/toilet/list','卫生间列表无数据','000');
 				 }
 				 console.log($scope.lists);
 				 console.log('-------------')

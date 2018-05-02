@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"/>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="yes" name="apple-touch-fullscreen" />
+<meta content="telephone=no" name="format-detection" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<link rel="stylesheet" href="/sp/public/weui/css/weui.css">
+<link rel="stylesheet" href="/sp/public/weui/css/weui2.css"/>
+<link rel="stylesheet" href="/sp/public/weui/css/weui3.css"/>
+<script src="/dw/public/widgets/layer.m/layer.m.js"></script>
+<script src="/sp/public/widgets/zeptojs/zepto.min.js"></script>
+<title>异常日志列表</title>
+<script type="text/javascript">
+$(function(){
+	initPage();
+})
+function initPage(){
+	$.ajax({
+		type:'post',
+		url:'/sp/mobile/Execute/queryScLog',
+		success:function(data){
+			if(data.data){
+				var resultList = data.data.data;
+				console.log(resultList);
+				var html = '';
+				for(var i = 0;i<resultList.length;i++){
+					var time  = resultList[i].createTime.substring(5,resultList[i].createTime.length);
+					html +='<tr><td>'+resultList[i].methodName+'</td><td>'+resultList[i].errorDesc+'</td><td>'+time.split(' ')[0]+'</td></tr>';
+				}
+				$("#tbody").html(html);
+			}
+		}
+	})
+}
+</script>
+</head>
+<body ontouchstart style="background-color: #f8f8f8;">
+<table class="weui-table weui-border-tb" >
+     <thead>
+     <tr><th>方法名</th><th>描述</th><th>时间</th></tr>
+     </thead>
+     <tbody id='tbody'>
+     </tbody>
+ </table>
+</body>
+</html>

@@ -30,11 +30,13 @@ import com.mysql.fabric.xmlrpc.base.Array;
 import controllers.comm.SessionInfo;
 import controllers.modules.mobile.bo.WxUserBo;
 import controllers.modules.mobile.bo.XjlDwFileBo;
+import controllers.modules.mobile.bo.XjlScLogBo;
 import controllers.modules.mobile.bo.XjlStampSetBo;
 import controllers.modules.mobile.filter.MobileFilter;
 import models.modules.mobile.WxServer;
 import models.modules.mobile.WxUser;
 import models.modules.mobile.XjlDwFile;
+import models.modules.mobile.XjlScLog;
 import models.modules.mobile.XjlStampSet;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -347,8 +349,20 @@ public class Execute  extends MobileFilter {
 	
 	/**——----------------------------------RUSH---------------------------------------------——**/
 	
-	public static void queryTolietList(){
-		String json = HttpClientUtil.invoke_cross(TOLIETLISTURL, "POST",null);
-		ok(json);
+	public static void saveScLog(){
+		 String errorCode = params.get("errorCode");
+		 String errorDesc = params.get("errorDesc");
+		 String methodName = params.get("methodName");
+		 XjlScLog xjlScLog = new XjlScLog();
+		 xjlScLog.errorCode = errorCode;
+		 xjlScLog.errorDesc = errorDesc;
+		 xjlScLog.methodName = methodName;
+		 XjlScLogBo.save(xjlScLog);
+	}
+	
+	public static void queryScLog(){
+		Map<String,String> condition = new HashMap<>();
+		Map map = XjlScLog.query(condition,1,1000000);
+		ok(map);
 	}
 }

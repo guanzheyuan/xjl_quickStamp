@@ -75,4 +75,8 @@ public class Skip extends MobileFilter {
 		renderArgs.put("time", params.get("time"));
 		render("modules/xjldw/rush/sc_waterList.html");
 	}
+	
+	public static void toScLog(){
+		render("modules/xjldw/rush/sc_log.html");
+	}
 }

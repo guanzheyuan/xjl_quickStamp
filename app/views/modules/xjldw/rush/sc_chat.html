@@ -95,6 +95,17 @@ angular.module('app', ['ngTouch'])
 			 }
 			 return value;
 		 }
+		 function writeLog(methodName,desc,code){
+			 var parmData = {methodName:methodName,errorDesc:desc,errorCode:code};
+			 $.ajax({
+				 type:'post',
+				 url:'/sp/mobile/Execute/saveScLog',
+				 data:parmData,
+				 success:function(data){
+					 
+				 }
+			 });
+		 }
 		 //获取当前时间
 		 function getNowFormatDate() {
 		        var date = new Date();
@@ -207,11 +218,27 @@ angular.module('app', ['ngTouch'])
 			 })
 		 }
 		 window.queryChat_Desc = function(data){
+			 if(data[0].maxTime.length ==0){
+				 writeLog('/flush/statisticsflush','最大用水量日期为空','000');
+			 }
+			 if(data[0].maxFlush.length == 0){
+				 writeLog('/flush/statisticsflush','最大用水量为空','000');
+			 }
+			 if(data[0].averageFlush.length == 0){
+				 writeLog('/flush/statisticsflush','平均值为空','000');
+			 }
+			 if(data[0].flushNumber.length == 0){
+				 writeLog('/flush/statisticsflush','冲水次数为空','000');
+			 }
+			 if(data[0].flushTimeSlot.length == 0){
+				 writeLog('/flush/statisticsflush','频繁冲水时间段为空','000');
+			 }
 			 $("#maxDate").html(data[0].maxTime);
 			 $("#flushValue").html(data[0].maxFlush);
 			 $("#avgFlushValue").html(data[0].averageFlush);
 			 $("#flushtimes").html(data[0].flushNumber);
 			 $("#flushTimeSlot").html(data[0].flushTimeSlot);
+			  
 		 }
 		 //冲水量
 		 $scope.agentChat_count =function(){
@@ -283,6 +310,8 @@ angular.module('app', ['ngTouch'])
 						  window.location.href="../../../sp/mobile/Skip/toRushWater?time="+ev.data._origin.statDate;
 					  }
 				  });
+			 }else{
+				 writeLog('/flush/statTimesDay','暂无数据','000');
 			 }
 		 }
 		 $scope.chatChange = function(){
@@ -326,6 +355,8 @@ angular.module('app', ['ngTouch'])
 				  chart.area().position('statDate*flushValue');
 				  chart.line().position('statDate*flushValue').size(2);
 				  chart.changeData(data_2);
+			 }else{
+				 writeLog('/flush/statMonth','暂无数据','000');
 			 }
 		 }
 		 //天
@@ -361,6 +392,8 @@ angular.module('app', ['ngTouch'])
 				  chart.line().position('statDate*flushValue').size(2);
 				  //chart.render();
 				  chart.changeData(data);
+			 }else{
+				 writeLog('/flush/statDay','暂无数据','000');
 			 }
 		 }
 	 }]);
