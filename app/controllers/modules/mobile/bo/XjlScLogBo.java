@@ -13,5 +13,4 @@ public class XjlScLogBo {
 		xjlScLog = xjlScLog.save();
 		return xjlScLog;
 	}
-
 }
