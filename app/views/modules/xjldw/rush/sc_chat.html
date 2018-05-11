@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/sp/public/weui/css/weui.css">
 <link rel="stylesheet" href="/sp/public/weui/css/weui2.css"/>
 <link rel="stylesheet" href="/sp/public/weui/css/weui3.css"/>
-<script src="/dw/public/widgets/layer.m/layer.m.js"></script>
+<script src="/sp/public/widgets/layer.m/layer.m.js"></script>
 <script src="/sp/public/widgets/zeptojs/zepto.min.js"></script>
 <script src="/sp/public/widgets/dropload/dropload.min.js"></script>
 <script src="/sp/public/widgets/angularjs/angular.min.js"></script>
@@ -243,8 +243,7 @@ angular.module('app', ['ngTouch'])
 		 //冲水量
 		 $scope.agentChat_count =function(){
 			 agentChat_count.getData().then(function(response){
-			 },function(response){
-			 });
+			 },function(response){});
 		 }
 		 window.queryChat_Count = function(data){
 			 if(data.length > 0){

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"/>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="yes" name="apple-touch-fullscreen" />
+<meta content="telephone=no" name="format-detection" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<link rel="stylesheet" href="/sp/public/weui/css/weui.css">
+<link rel="stylesheet" href="/sp/public/weui/css/weui2.css"/>
+<link rel="stylesheet" href="/sp/public/weui/css/weui3.css"/>
+
+<!--  -->
+<link rel="stylesheet" href="/sp/public/weui/css/weui.min.css">
+<link rel="stylesheet" href="/sp/public/weui/css/jquery-weui.css"/>
+<!-- <link rel="stylesheet" href="/sp/public/weui/css/demos.css"/>  -->
+
+<!--  -->
+<script src="/sp/public/js/jquery-1.9.1.min.js"></script>
+<script src="/sp/public/weui/js/jquery-weui.js"></script>
+<script src="/sp/public/widgets/zeptojs/zepto.min.js"></script>
+<script src="/sp/public/widgets/dropload/dropload.min.js"></script>
+<script src="/sp/public/widgets/angularjs/angular.min.js"></script>
+<script src="/sp/public/widgets/angularjs/angular-touch.min.js"></script>
+<script src="/sp/public/js/zepto.min.js"></script>
+<script src="/sp/public/widgets/picker/js/picker.js"></script>
+<script type="text/javascript">
+angular.module('app', ['ngTouch'])
+	.value('appValue', {
+	    index: 1,
+	    size: 10
+	})
+	.factory('agentRemote',['$http','appValue',function($http, appValue){
+		return {
+			getData:function(data){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/timeQuantumConfig',
+					params:data
+				});
+			},
+			queryConfig:function(data){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/queryScConfig'
+				})
+			},
+			queryConfigNotinterval:function(){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/queryScConfigNotinterval'
+				})
+			},
+			modifyInterval:function(data){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/modifyInterval',
+					params:data
+				})
+			},
+			queryInterval:function(){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/queryInterval'
+				})
+			},
+			queryConfigById:function(data){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/queryConfigById',
+					params:data
+				})
+			},
+			modifyStatus:function(data){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/modifyStatus',
+					params:data
+				})
+			},
+			modifyIntervalIsNull:function(data){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/modifyItervalIsNull',
+					params:data
+				})
+			},
+			modifyTimeQuanTumById:function(data){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/modifyTimeQuanTunById',
+					params:data
+				})
+			},
+			modifyIntervalById:function(data){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/modifyItervalById',
+					params:data
+				})
+			},
+			saveToilet:function(data){
+				return $http({
+					method:'post',
+					url:'/sp/mobile/Execute/saveToilet',
+					params:data
+				})
+			}
+		}
+	}])
+	.controller('MainController',['$scope','appValue','agentRemote','$timeout',function($scope, appValue,agentRemote,$timeout){
+	 $scope.timeQuanTumList = [];//感应时段列表
+	 $scope.timeQuanTumNotInterval = [];//未设置时段列表
+	 $scope.timeQuanTumId = [];//感应时段id 集合
+	 $scope.timeInterval = [];//配置冲水间隔
+	 $scope.id = '';
+	 $scope.clickAction = function(param,flag){
+		  $.actions({
+	          title: "选择操作",
+	          onClose: function() {
+	            console.log("close");
+	          },
+	          actions: [
+	            {
+	              text: "编辑",
+	              className: "color-warning",
+	              onClick: function() {
+	                if(typeof(param) == 'undefined'){
+	                	$.toptips('请选择数据','warning');return;
+	                }
+	                var data = {"id":param};
+	                agentRemote.queryConfigById(data).then(function(response){
+                		var res = response.data.data.timeQuantum;
+	                	 $scope.id = response.data.data.id;
+	                	 if('1' == flag){
+	                		$("#half_update").popup('open');
+	 	                	$("#start_update").val(res.split('-')[0]);
+	 	                	$("#end_update").val(res.split('-')[1]);
+	 	                }else{
+	 	                	$("#time_min_update").popup('open');
+	 	                	$("#start_min_update").val(res.split('-')[0]);
+	 	                	$("#end_min_update").val(res.split('-')[1]);
+	 	                	$("#minute_update").val(response.data.data.interval);
+	 	                }
+	                },function(response){
+	                })
+	                
+	              }
+	            },
+	            {
+	              text: "删除",
+	              className: 'color-danger',
+	              onClick: function() {
+	                if(typeof(param) == ''){
+	                	$.toptips('请选择数据','warning');return;
+	                }
+	                var data = {"id":param};
+	                if('1' == flag){
+	 	                agentRemote.modifyStatus(data).then(function(response){
+	 	                	window.location.reload();
+	 	                },function(response){
+	 	                })
+	                }else{
+	                	agentRemote.modifyIntervalIsNull(data).then(function(response){
+	                		window.location.reload();
+	                	},function(response){
+	                	})
+	                }
+	              }
+	            }
+	          ]
+	        });
+		}
+	 $scope.queryNotInterval = function(){
+		 agentRemote.queryConfigNotinterval().then(function(response){
+			 var arr_quan = [];
+			 var arr_id = [];
+			if(response.data.data.data.length > 0){
+				for(var i = 0;i<response.data.data.data.length;i++){
+					arr_quan.push(response.data.data.data[i].timeQuantum);
+					arr_id.push(response.data.data.data[i].id);
+				}
+			}
+			$scope.timeQuanTumNotInterval = arr_quan;
+		 },function(response){
+		 })
+	 }
+	 $scope.queryConfigNotinternal = function(){
+		 agentRemote.queryConfigNotinterval().then(function(response){
+			 var arr_quan = [];
+			 var arr_id = [];
+			if(response.data.data.data.length > 0){
+				for(var i = 0;i<response.data.data.data.length;i++){
+					arr_quan.push(response.data.data.data[i].timeQuantum);
+					arr_id.push(response.data.data.data[i].id);
+				}
+			}
+			$("#_timeQuanTum").picker({
+			        title: "选择感应时间段",
+			        toolbarCloseText:'确定',
+			        cols: [
+			          {
+			            textAlign: 'center',
+			            values: arr_quan
+			          }
+			        ]
+			 });
+		 },function(response){
+		 })
+	 }
+	 
+	 $scope.refresh = function(){
+		 agentRemote.queryConfigNotinterval().then(function(response){
+			 var arr_quan = [];
+			 var arr_id = [];
+			if(response.data.data.data.length > 0){
+				for(var i = 0;i<response.data.data.data.length;i++){
+					arr_quan.push(response.data.data.data[i].timeQuantum);
+					arr_id.push(response.data.data.data[i].id);
+				}
+			}
+			$("#_timeQuanTum").picker({
+			        title: "选择感应时间段",
+			        toolbarCloseText:'确定',
+			        cols: [
+			          {
+			            textAlign: 'center',
+			            values: arr_quan
+			          }
+			        ]
+			 });
+			$("#_timeQuanTum_update").picker({
+		        title: "选择感应时间段",
+		        toolbarCloseText:'确定',
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: arr_quan
+		          }
+		        ]
+		 });
+		 },function(response){
+		 })
+	 }
+	 $scope.timeMinute = function(){
+		 $("#minute").picker({title:"选择间隔时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 1; i <= 60; i++) {
+		                	if(i%5 == 0){
+		                		arr.push(i < 10 ? i : i);
+		                	}
+		                }
+		                return arr;
+		            })()
+		            
+		          }
+		        ]}); 
+		 $("#minute_update").picker({title:"选择间隔时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 1; i <= 60; i++) {
+		                	if(i%5 == 0){
+		                		arr.push(i < 10 ? i : i);
+		                	}
+		                }
+		                return arr;
+		            })()
+		            
+		          }
+		        ]}); 
+	 }
+	 $scope.timePicker = function(){
+		 $("#start_min_update").picker({title:"选择时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })()
+		            
+		          },
+		          {
+		            textAlign: 'center',
+		            values:  (function () {
+		                var arr = [];
+		                arr.push('：00');
+		                return arr;
+		            })(),
+		          }
+		        ]}); 
+		 $("#start_min").picker({title:"选择时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })()
+		            
+		          },
+		          {
+		            textAlign: 'center',
+		            values:  (function () {
+		                var arr = [];
+		                arr.push('：00');
+		                return arr;
+		            })(),
+		          }
+		        ]}); 
+		 $("#start_update").picker({title:"选择时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })()
+		            
+		          },
+		          {
+		            textAlign: 'center',
+		            values:  (function () {
+		                var arr = [];
+		                arr.push('：00');
+		                return arr;
+		            })(),
+		          }
+		        ]}); 
+		 $("#start").picker({title:"选择时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })()
+		            
+		          },
+		          {
+		            textAlign: 'center',
+		            values:  (function () {
+		                var arr = [];
+		                arr.push('：00');
+		                return arr;
+		            })(),
+		          }
+		        ]});  
+		 $("#end").picker({title:"选择时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })()
+		            
+		          },
+		          {
+		            textAlign: 'center',
+		            values:  (function () {
+		                var arr = [];
+		                arr.push('：00');
+		                return arr;
+		            })(),
+		          }
+		        ]}); 
+		 $("#end_update").picker({title:"选择时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })()
+		            
+		          },
+		          {
+		            textAlign: 'center',
+		            values:  (function () {
+		                var arr = [];
+		                arr.push('：00');
+		                return arr;
+		            })(),
+		          }
+		        ]});
+		 $("#end_min").picker({title:"选择时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })()
+		            
+		          },
+		          {
+		            textAlign: 'center',
+		            values:  (function () {
+		                var arr = [];
+		                arr.push('：00');
+		                return arr;
+		            })(),
+		          }
+		        ]}); 
+		 $("#end_min_update").picker({title:"选择时间",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })()
+		            
+		          },
+		          {
+		            textAlign: 'center',
+		            values:  (function () {
+		                var arr = [];
+		                arr.push('：00');
+		                return arr;
+		            })(),
+		          }
+		        ]}); 
+	 }
+	 $scope.queryConfig = function(){
+		 agentRemote.queryConfig().then(function(response){
+			 $scope.timeQuanTumList = response.data.data.data;
+		 },function(response){
+		 })
+	 }
+	 $scope.queryInterval = function(){
+		 agentRemote.queryInterval().then(function(response){
+			 $scope.timeInterval = response.data.data.data;
+		 },function(response){
+		 })
+	 }
+	 $scope.modifyIntervalById = function(){
+		 if($("#start_min_update").val() == ''){
+				$.toptips('开始时间不能为空','warning');return;
+		 }
+		 if($("#end_min_update").val() == ''){
+				$.toptips('结束时间不能为空','warning');return;
+		 }
+		 if($("#minute_update").val() == ''){
+			 $.toptips('时间间隔不能为空','warning');return;
+		 }
+		 var data = {"id":$scope.id ,"iterval":$("#minute_update").val(),"timeQuanTum":$("#start_min_update").val()+'-'+$("#end_min_update").val()};
+		 agentRemote.modifyIntervalById(data).then(function(response){
+			 window.location.reload();
+		 },function(response){
+			 
+		 })
+	 }
+	 $scope.modifyQuanTumConfig = function(){
+		 if($("#start_update").val() == ''){
+				$.toptips('开始时间不能为空','warning');return;
+		 }
+		 if($("#end_update").val() == ''){
+				$.toptips('结束时间不能为空','warning');return;
+		 }
+		 var data ={"timeQuanTum":$("#start_update").val()+'-'+$("#end_update").val(),"id":$scope.id};
+		 agentRemote.modifyTimeQuanTumById(data).then(function(response){
+			 window.location.reload();
+		 },function(response){
+		 })
+	 }
+	 
+	 //配置冲水时间段
+	 $scope.timeQuanTumConfig_min = function(){
+		if($("#start_min").val() == ''){
+			$.toptips('开始时间不能为空','warning');return;
+		}
+		if($("#end_min").val() == ''){
+			$.toptips('结束时间不能为空','warning');return;
+		}
+		if($("#minute").val() == ''){
+			 $.toptips('时间间隔不能为空','warning');return;
+		 }
+		var data ={"startTime":$("#start_min").val(),"endTime":$("#end_min").val(),"interval":$("#minute").val()};
+		agentRemote.getData(data).then(function(response){
+			window.location.reload();
+		},function(response){
+		})
+	 }
+	 //配置冲水时间段
+	 $scope.timeQuanTumConfig = function(flag){
+		if($("#start").val() == ''){
+			$.toptips('开始时间不能为空','warning');return;
+		}
+		if($("#end").val() == ''){
+			$.toptips('结束时间不能为空','warning');return;
+		}
+		var data ={"startTime":$("#start").val(),"endTime":$("#end").val(),"interval":$("#minute").val()};
+		agentRemote.getData(data).then(function(response){
+			window.location.reload();
+		},function(response){
+		})
+	 }
+	 $scope.selectQuanTime = function(){
+		 if($("#_timeQuanTum").val() == ''){
+			 $.toptips('时间段不能为空','warning');return;
+		 }
+		 if($("#minute").val() == ''){
+			 $.toptips('时间间隔不能为空','warning');return;
+		 }
+		 var data = {"timeQuantum":$("#_timeQuanTum").val(),"interval":$("#minute").val()};
+		 agentRemote.modifyInterval(data).then(function(response){
+			 window.location.reload();
+		 },function(response){
+		 });
+	 }
+	 $scope.add = function(){
+		 $.prompt("新建卫生间", "", function(text) {
+			 var data = {"toiletName":text};
+	          agentRemote.saveToilet(data).then(function(response){
+	        	  
+	          },function(response){
+	          })
+	        }, function() {
+	          //取消操作
+	        });
+	 }
+	 $scope.queryConfig();
+	 $scope.timePicker();
+	 $scope.timeMinute();
+	 $scope.queryInterval();
+	 $scope.refresh();
+	}]);
+</script>
+</head>
+<body ng-cloak ng-controller="MainController" ontouchstart style="background-color: #f8f8f8;">
+<div class="weui_cells_title" style="margin:15px;">
+<div>冲水设置规则</div>
+<div style="float:right;margin-top:-9%;" ng-click="add()"><img  alt="" src="/sp/public/images/rush/add.png" width="35" height="35"></div>
+</div>
+<div class="weui_cells">         
+  <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+          <p>1.感应时段设置</p>
+      </div>
+      <div class="weui_cell_ft">
+      	<a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary  open-popup" data-target="#half"  >新增</a>
+      </div>
+  </div> 
+  <div class="weui_cell " ng-click="clickAction('{{quanTum.id}}','1')" ng-repeat="quanTum in timeQuanTumList">
+      <div class="weui_cell_bd weui_cell_primary">
+          <p>{{quanTum.timeQuantum}}</p>
+      </div>
+  </div>
+</div>   
+
+<div class="weui_cells">  
+ <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+          <p>2.冲水间隔设置</p>
+      </div>
+      <div class="weui_cell_ft">
+      	<a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary open-popup" data-target="#time_min" >新增</a>
+      </div>
+  </div>
+   <div class="weui_cell " ng-click="clickAction('{{interval.id}}','2')" ng-repeat="interval in timeInterval">
+      <div class="weui_cell_bd weui_cell_primary">
+          <p>{{interval.timeQuantum}}间隔 {{interval.interval}} 分钟冲水</p>
+      </div>
+  </div>
+</div>
+<!-- 间隔日期 add -->
+ <div id="half" class='weui-popup__container popup-bottom'>
+      <div class="weui-popup__overlay"></div>
+      <div class="weui-popup__modal">
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <a href="javascript:;" class="picker-button close-popup" ng-click="timeQuanTumConfig()">确定</a>
+            <h1 class="title">设置时段</h1>
+          </div>
+        </div>
+        <div class="modal-content">
+          <div class="weui-grids">
+          	<div class="weui_cells weui_cells_form ">   
+		           <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">开始时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="start" type="text" value="">
+				        </div>
+			       </div>
+			       <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">结束时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="end" type="text" value="">
+				        </div>
+			       </div>
+ 			</div>
+          </div>
+        </div>
+      </div>
+</div> 
+<!-- 间隔日期 update -->
+ <div id="half_update" class='weui-popup__container popup-bottom'>
+      <div class="weui-popup__overlay"></div>
+      <div class="weui-popup__modal">
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <a href="javascript:;" class="picker-button close-popup" ng-click="modifyQuanTumConfig()">修改</a>
+            <h1 class="title">设置时段</h1>
+          </div>
+        </div>
+        <div class="modal-content">
+          <div class="weui-grids">
+          	<div class="weui_cells weui_cells_form ">   
+		           <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">开始时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="start_update" type="text" value="">
+				        </div>
+			       </div>
+			       <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">结束时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="end_update" type="text" value="">
+				        </div>
+			       </div>
+ 			</div>
+          </div>
+        </div>
+      </div>
+</div> 
+<!-- 间隔时间 add --> 
+<div id="time_min" class='weui-popup__container popup-bottom'>
+      <div class="weui-popup__overlay"></div>
+      <div class="weui-popup__modal">
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <a href="javascript:;" class="picker-button close-popup" ng-click="timeQuanTumConfig_min()"  >确定</a>
+            <h1 class="title">设置时段</h1>
+          </div>
+        </div>
+        <div class="modal-content">
+          <div class="weui-grids">
+          	<div class="weui_cells weui_cells_form ">   
+		           <!-- <div class="weui_cell">
+		                <div class="weui_cell_hd"><label for="" class="weui_label">感应时间段:</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input class="weui_input" type="text" value="" id='_timeQuanTum'/>
+		                </div>
+	               </div>  -->
+	               <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">开始时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="start_min" type="text" value="">
+				        </div>
+			       </div>
+			       <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">结束时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="end_min" type="text" value="">
+				        </div>
+			       </div>
+		           <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">间隔时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="minute" type="text" value="">
+				        </div>
+			       </div>
+ 			</div>
+          </div>
+        </div>
+      </div>
+</div>
+<!-- 间隔时间 update --> 
+<div id="time_min_update" class='weui-popup__container popup-bottom'>
+      <div class="weui-popup__overlay"></div>
+      <div class="weui-popup__modal">
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <a href="javascript:;" class="picker-button close-popup" ng-click="modifyIntervalById()">修改</a>
+            <h1 class="title">设置时段</h1>
+          </div>
+        </div>
+        <div class="modal-content">
+          <div class="weui-grids">
+          	<div class="weui_cells weui_cells_form ">   
+		           <!-- <div class="weui_cell">
+		                <div class="weui_cell_hd"><label for="" class="weui_label">感应时间段:</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input class="weui_input" type="text" value="" id='_timeQuanTum_update'/>
+		                </div>
+	               </div> --> 
+	               <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">开始时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="start_min_update" type="text" value="">
+				        </div>
+			       </div>
+			       <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">结束时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="end_min_update" type="text" value="">
+				        </div>
+			       </div>
+		           <div class="weui-cell">
+				        <div class="weui-cell__hd"><label for="time" class="">间隔时间：</label></div>
+				        <div class="weui-cell__bd">
+				          <input class="weui-input" id="minute_update" type="text" value="">
+				        </div>
+			       </div>
+ 			</div>
+          </div>
+        </div>
+      </div>
+</div>
+</body>
+</html>

@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="/sp/public/weui/css/weui.css">
 <link rel="stylesheet" href="/sp/public/weui/css/weui2.css"/>
 <link rel="stylesheet" href="/sp/public/weui/css/weui3.css"/>
-<script src="/dw/public/widgets/layer.m/layer.m.js"></script>
+<script src="/sp/public/widgets/layer.m/layer.m.js"></script>
 <script src="/sp/public/widgets/zeptojs/zepto.min.js"></script>
 <script src="/sp/public/widgets/dropload/dropload.min.js"></script>
 <script src="/sp/public/widgets/angularjs/angular.min.js"></script>
@@ -69,7 +69,17 @@ angular.module('app', ['ngTouch'])
 				}
 			}
 		}])
-		.controller('MainController',['$scope','appValue','agentRemote','agentRemoteInfo','handle','$timeout',function($scope, appValue, agentRemote,agentRemoteInfo,handle,$timeout){
+		.factory('local',['$http','appValue',function($http, appValue){
+			return {
+				query:function(deviceCode){
+					return $http({
+						method:'post',
+						url:'/sp/mobile/Execute/querytoilet'
+					});
+				}
+			}
+		}])
+		.controller('MainController',['$scope','appValue','agentRemote','agentRemoteInfo','handle','local','$timeout',function($scope, appValue, agentRemote,agentRemoteInfo,handle,local,$timeout){
 		    $scope.lists = [];
 		    function writeLog(methodName,desc,code){
 				 var parmData = {methodName:methodName,errorDesc:desc,errorCode:code};
@@ -142,6 +152,11 @@ angular.module('app', ['ngTouch'])
 				 console.log($scope.lists);
 				 console.log('-------------')
 			 }
+		     
+		     $scope.initLocal = function(){
+		    	 local.query().then(function(response){
+		    	 })
+		     }
 			 $scope.initPage();
 			$('#scroller').dropload({
                  domUp: {
